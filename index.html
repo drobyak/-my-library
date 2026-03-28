@@ -73,6 +73,8 @@
                 <option value="In Arbeit">In Arbeit</option>
                 <option value="Geplant">Geplant</option>
             </select>
+            <label class="info-label">Gelesen am:</label>
+<input type="date" id="fDate">
             <label class="info-label">Bewertung (1-5):</label>
             <input type="number" id="fRating" min="1" max="5">
             <label class="info-label">Cover Bild (Pfad):</label>
@@ -152,6 +154,13 @@
             switchMode('edit');
             document.getElementById('bookModal').style.display = 'flex';
         }
+            if (type === 'edit') {
+        document.getElementById('fTitle').value = currentBook.title;
+        document.getElementById('fAuthor').value = currentBook.author;
+        document.getElementById('fDate').value = currentBook.datum || "";
+        switchMode('edit');
+    }
+
     }
 
     async function saveData() {
@@ -162,7 +171,7 @@
             author: document.getElementById('fAuthor').value,
             status: document.getElementById('fStatus').value,
             rating: document.getElementById('fRating').value,
-            datum: new Date().toLocaleDateString('de-DE'),
+            datum: document.getElementById('fDate').value,
             cover: document.getElementById('fCover').value,
             notes: document.getElementById('fNotes').value
         };
