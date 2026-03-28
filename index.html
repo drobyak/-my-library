@@ -157,7 +157,7 @@
             if (type === 'edit') {
         document.getElementById('fTitle').value = currentBook.title;
         document.getElementById('fAuthor').value = currentBook.author;
-        document.getElementById('fDate').value = currentBook.datum || "";
+        document.getElementById('fDate').value = currentBook.Datum || "";
         switchMode('edit');
     }
 
@@ -165,13 +165,13 @@
 
     async function saveData() {
         const data = {
-            action: currentBook && currentBook.id !== "" ? 'update' : 'add',
+            action: currentBook ? 'update' : 'add',
             id: document.getElementById('editId').value,
             title: document.getElementById('fTitle').value,
             author: document.getElementById('fAuthor').value,
             status: document.getElementById('fStatus').value,
             rating: document.getElementById('fRating').value,
-            datum: document.getElementById('fDate').value,
+            Datum: document.getElementById('fDate').value,
             cover: document.getElementById('fCover').value,
             notes: document.getElementById('fNotes').value
         };
