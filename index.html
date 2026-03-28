@@ -4,101 +4,240 @@
     <meta charset="UTF-8">
     <title>Mein Lesetagebuch Pro</title>
     <link rel="icon" type="image/png" href="img/logo.png">
-<link rel="apple-touch-icon" href="img/logo.png">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Lesetagebuch">
-<link rel="shortcut icon" sizes="192x192" href="img/logo.png">
+    <link rel="apple-touch-icon" href="img/logo.png">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Lesetagebuch">
+    <link rel="shortcut icon" sizes="192x192" href="img/logo.png">
 
     <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Merriweather:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-    
+
     <style>
-        body { font-family: 'Merriweather', serif; background-color: #fdf6f0; padding: 20px; color: #2c2c2c; }
-                .container { 
-            width: 95%; /* Використовувати 95% ширини екрана */
-            max-width: 1000px; 
-            margin: 0 auto; 
-            text-align: center; 
+        body {
+            font-family: 'Merriweather', serif;
+            background-color: #fdf6f0;
+            padding: 20px;
+            color: #2c2c2c;
         }
-        .book-grid { 
-            display: grid; 
-            /* Автоматично підбирає кількість книг у ряд: на телефоні буде 2, на ноуті більше */
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); 
-            gap: 15px; 
+
+        .container {
+            width: 95%;
+            max-width: 1000px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .book-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 15px;
             padding: 10px;
         }
 
-        
-        .book-card { background: white; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); overflow: hidden; cursor: pointer; transition: 0.3s; text-align: left; }
-        .book-card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.15); }
-        .book-card img { width: 100%; height: 240px; object-fit: cover; }
-        .book-title-label { padding: 12px; font-size: 14px; font-weight: 700; line-height: 1.3; }
+        .book-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            overflow: hidden;
+            cursor: pointer;
+            transition: 0.3s;
+            text-align: left;
+        }
 
-        h1 { font-family: 'Great Vibes', cursive; font-size: 65px; color: #4a3a2a; margin-bottom: 10px; font-weight: normal; }
+        .book-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
 
-        .btn { background: #5d4037; color: white; border: none; padding: 10px 22px; border-radius: 4px; cursor: pointer; margin: 5px; font-family: 'Merriweather', serif; font-size: 14px; transition: 0.3s; }
-        .btn:hover { background: #3e2723; }
-        .btn-add { background: #00796b; margin-bottom: 20px; }
-        .btn-delete { background: #c62828; margin-top: 20px; width: 100%; }
+        .book-card img {
+            width: 100%;
+            height: 240px;
+            object-fit: cover;
+            display: block;
+        }
 
-        .modal { display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); align-items: center; justify-content: center; backdrop-filter: blur(3px); }
-        .modal-content { background: white; padding: 30px; border-radius: 12px; max-width: 480px; width: 90%; position: relative; text-align: left; }
-        .close { position: absolute; right: 20px; top: 10px; font-size: 28px; cursor: pointer; color: #999; }
-        
-        input, select, textarea { width: 100%; padding: 10px; margin: 8px 0; border: 1px solid #d7ccc8; border-radius: 4px; font-family: 'Merriweather', serif; box-sizing: border-box; }
-        .hidden { display: none; }
-        .rating-stars { color: #f39c12; font-size: 20px; margin: 10px 0; }
-        .info-label { font-weight: 700; color: #5d4037; }
+        .book-title-label {
+            padding: 12px;
+            font-size: 14px;
+            font-weight: 700;
+            line-height: 1.3;
+        }
+
+        h1 {
+            font-family: 'Great Vibes', cursive;
+            font-size: 65px;
+            color: #4a3a2a;
+            margin-bottom: 10px;
+            font-weight: normal;
+        }
+
+        .btn {
+            background: #5d4037;
+            color: white;
+            border: none;
+            padding: 10px 22px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+            font-family: 'Merriweather', serif;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            background: #3e2723;
+        }
+
+        .btn-add {
+            background: #00796b;
+            margin-bottom: 20px;
+        }
+
+        .btn-delete {
+            background: #c62828;
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 100;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(3px);
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            max-width: 480px;
+            width: 90%;
+            position: relative;
+            text-align: left;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .close {
+            position: absolute;
+            right: 20px;
+            top: 10px;
+            font-size: 28px;
+            cursor: pointer;
+            color: #999;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border: 1px solid #d7ccc8;
+            border-radius: 4px;
+            font-family: 'Merriweather', serif;
+            box-sizing: border-box;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .rating-stars {
+            color: #f39c12;
+            font-size: 20px;
+            margin: 10px 0;
+        }
+
+        .info-label {
+            font-weight: 700;
+            color: #5d4037;
+        }
+
+        .error-box {
+            background: #ffebee;
+            color: #b71c1c;
+            border: 1px solid #ef9a9a;
+            padding: 12px;
+            border-radius: 6px;
+            margin: 20px 0;
+            display: none;
+        }
+
+        .empty-box {
+            color: #6d4c41;
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
     <h1>Mein Lesetagebuch</h1>
-    <div style="text-align: center; margin-bottom: 20px;">
-    <button onclick="exportData()" style="background-color: #4a7c59; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; margin: 5px;">📥 Daten exportieren</button>
-    <button onclick="document.getElementById('importFile').click()" style="background-color: #8d5b4c; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; margin: 5px;">📤 Daten importieren</button>
-    <input type="file" id="importFile" style="display:none" onchange="importData(event)">
-</div>
+
     <button class="btn btn-add" onclick="showForm('add')">+ Neues Buch hinzufügen</button>
+
+    <div id="errorBox" class="error-box"></div>
     <div class="book-grid" id="grid"></div>
+    <div id="emptyBox" class="empty-box hidden">Noch keine Bücher vorhanden.</div>
 </div>
 
 <div id="bookModal" class="modal">
     <div class="modal-content">
         <span class="close" onclick="closeModal()">&times;</span>
-        
+
         <div id="viewMode">
-            <img id="viewImg" src="" style="width:140px; border-radius:4px; display:block; margin:0 auto 20px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+            <img id="viewImg" src="img/default.jpg" alt="Buchcover"
+                 style="width:140px; border-radius:4px; display:block; margin:0 auto 20px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"
+                 onerror="this.src='img/default.jpg'">
+
             <p><span class="info-label">Titel:</span> <span id="vTitle"></span></p>
             <p><span class="info-label">Autor:</span> <span id="vAuthor"></span></p>
+            <p><span class="info-label">Status:</span> <span id="vStatus"></span></p>
+            <p><span class="info-label">Gelesen am:</span> <span id="vDate"></span></p>
             <div id="vRating" class="rating-stars"></div>
+
             <p><span class="info-label">Notizen:</span></p>
             <p id="vNotes" style="font-style: italic; color: #555; line-height: 1.6;"></p>
+
             <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
             <button class="btn" onclick="switchMode('edit')" style="background:#f39c12">Bearbeiten ✏️</button>
         </div>
 
         <div id="editMode" class="hidden">
             <h3 id="modalTitleText" style="margin-top:0">Buch bearbeiten</h3>
+
             <input type="hidden" id="editId">
+
             <label class="info-label">Titel:</label>
             <input type="text" id="fTitle">
+
             <label class="info-label">Autor:</label>
             <input type="text" id="fAuthor">
+
             <label class="info-label">Status:</label>
             <select id="fStatus">
                 <option value="Gelesen">Gelesen</option>
                 <option value="In Arbeit">In Arbeit</option>
                 <option value="Geplant">Geplant</option>
             </select>
+
             <label class="info-label">Gelesen am:</label>
-<input type="date" id="fDate">
+            <input type="date" id="fDate">
+
             <label class="info-label">Bewertung (1-5):</label>
             <input type="number" id="fRating" min="1" max="5">
+
             <label class="info-label">Cover Bild (Pfad):</label>
-            <input type="text" id="fCover">
+            <input type="text" id="fCover" placeholder="z. B. img/meinbuch.jpg">
+
             <label class="info-label">Meine Notizen:</label>
             <textarea id="fNotes" rows="4"></textarea>
+
             <button class="btn" onclick="saveData()" style="width:100%; background:#00796b;">Speichern ✅</button>
             <button id="deleteBtn" class="btn btn-delete" onclick="deleteBook()">Dieses Buch löschen 🗑️</button>
         </div>
@@ -107,139 +246,226 @@
 
 <script>
     const SHEET_ID = '1w6agK2BLHEWltHMhySFTPToh4ERV448Z7JdqSXBC_Ts';
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwbI6zWul_c95TbtDKUjcCAAZy5C-QkVr9Y_wZU7S1Wc3f5okH64uYek-WSHxAq3nhsZg/exec'; 
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwbI6zWul_c95TbtDKUjcCAAZy5C-QkVr9Y_wZU7S1Wc3f5okH64uYek-WSHxAq3nhsZg/exec';
     const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
+
     let currentBook = null;
 
-    async function loadBooks() {
-        const res = await fetch(url);
-        const text = await res.text();
-        const json = JSON.parse(text.substring(47).slice(0, -2));
-        const grid = document.getElementById('grid');
-        grid.innerHTML = '';
+    function showError(message) {
+        const errorBox = document.getElementById('errorBox');
+        errorBox.textContent = message;
+        errorBox.style.display = 'block';
+    }
 
-        json.table.rows.forEach(row => {
-            if (row.c && row.c[1] && row.c[1].v !== "Titel") {
-                const book = {
-                    id: row.c[0] ? row.c[0].v : '',
-                    title: row.c[1] ? row.c[1].v : '',
-                    author: row.c[2] ? row.c[2].v : '',
-                    status: row.c[3] ? row.c[3].v : '',
-                    rating: row.c[4] ? row.c[4].v : 0,
-                    cover: row.c[6] ? row.c[6].v : 'img/default.jpg',
-                    notes: row.c[7] ? row.c[7].v : ''
-                };
-                const card = document.createElement('div');
-                card.className = 'book-card';
-                card.innerHTML = `<img src="${book.cover}"><div class="book-title-label">${book.title}</div>`;
-                card.onclick = () => showDetails(book);
-                grid.appendChild(card);
+    function hideError() {
+        const errorBox = document.getElementById('errorBox');
+        errorBox.textContent = '';
+        errorBox.style.display = 'none';
+    }
+
+    function formatDateForInput(value) {
+        if (!value) return '';
+
+        if (/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+            return value;
+        }
+
+        const parsed = new Date(value);
+        if (!isNaN(parsed)) {
+            return parsed.toISOString().split('T')[0];
+        }
+
+        return '';
+    }
+
+    function formatDateForView(value) {
+        if (!value) return '—';
+
+        const parsed = new Date(value);
+        if (!isNaN(parsed)) {
+            return parsed.toLocaleDateString('de-DE');
+        }
+
+        return value;
+    }
+
+    async function loadBooks() {
+        hideError();
+
+        try {
+            const res = await fetch(url);
+            if (!res.ok) {
+                throw new Error('Die Tabelle konnte nicht geladen werden.');
             }
-        });
+
+            const text = await res.text();
+            const json = JSON.parse(text.substring(47).slice(0, -2));
+
+            const grid = document.getElementById('grid');
+            const emptyBox = document.getElementById('emptyBox');
+            grid.innerHTML = '';
+
+            let hasBooks = false;
+
+            json.table.rows.forEach(row => {
+                if (row.c && row.c[1] && row.c[1].v !== "Titel") {
+                    const book = {
+                        id: row.c[0] ? row.c[0].v : '',
+                        title: row.c[1] ? row.c[1].v : '',
+                        author: row.c[2] ? row.c[2].v : '',
+                        status: row.c[3] ? row.c[3].v : 'Gelesen',
+                        rating: row.c[4] ? row.c[4].v : 0,
+                        date: row.c[5] ? row.c[5].v : '',
+                        cover: row.c[6] ? row.c[6].v : 'img/default.jpg',
+                        notes: row.c[7] ? row.c[7].v : ''
+                    };
+
+                    const card = document.createElement('div');
+                    card.className = 'book-card';
+                    card.innerHTML = `
+                        <img src="${book.cover || 'img/default.jpg'}" alt="${book.title}"
+                             onerror="this.src='img/default.jpg'">
+                        <div class="book-title-label">${book.title}</div>
+                    `;
+                    card.onclick = () => showDetails(book);
+
+                    grid.appendChild(card);
+                    hasBooks = true;
+                }
+            });
+
+            emptyBox.classList.toggle('hidden', hasBooks);
+
+        } catch (error) {
+            console.error(error);
+            showError('Fehler beim Laden der Bücher. Bitte prüfe die Google-Tabelle und die Freigabe.');
+        }
     }
 
     function showDetails(book) {
         currentBook = book;
-        document.getElementById('vTitle').innerText = book.title;
-        document.getElementById('vAuthor').innerText = book.author;
-        document.getElementById('viewImg').src = book.cover;
-        document.getElementById('vNotes').innerText = book.notes || "Keine Notizen vorhanden.";
-        document.getElementById('vRating').innerText = "★".repeat(book.rating);
+
+        document.getElementById('vTitle').innerText = book.title || '—';
+        document.getElementById('vAuthor').innerText = book.author || '—';
+        document.getElementById('vStatus').innerText = book.status || '—';
+        document.getElementById('vDate').innerText = formatDateForView(book.date);
+        document.getElementById('viewImg').src = book.cover || 'img/default.jpg';
+        document.getElementById('vNotes').innerText = book.notes || 'Keine Notizen vorhanden.';
+        document.getElementById('vRating').innerText = book.rating ? "★".repeat(book.rating) : 'Keine Bewertung';
+
         switchMode('view');
         document.getElementById('bookModal').style.display = 'flex';
     }
 
     function switchMode(mode) {
+        const viewMode = document.getElementById('viewMode');
+        const editMode = document.getElementById('editMode');
+
         if (mode === 'edit') {
-            document.getElementById('viewMode').classList.add('hidden');
-            document.getElementById('editMode').classList.remove('hidden');
+            viewMode.classList.add('hidden');
+            editMode.classList.remove('hidden');
+
+            document.getElementById('modalTitleText').innerText = currentBook ? 'Buch bearbeiten' : 'Neues Buch hinzufügen';
             document.getElementById('editId').value = currentBook ? currentBook.id : '';
             document.getElementById('fTitle').value = currentBook ? currentBook.title : '';
             document.getElementById('fAuthor').value = currentBook ? currentBook.author : '';
+            document.getElementById('fStatus').value = currentBook ? (currentBook.status || 'Gelesen') : 'Gelesen';
+            document.getElementById('fDate').value = currentBook ? formatDateForInput(currentBook.date) : '';
             document.getElementById('fRating').value = currentBook ? currentBook.rating : '';
             document.getElementById('fCover').value = currentBook ? currentBook.cover : '';
             document.getElementById('fNotes').value = currentBook ? currentBook.notes : '';
+
             document.getElementById('deleteBtn').classList.toggle('hidden', !currentBook);
         } else {
-            document.getElementById('viewMode').classList.remove('hidden');
-            document.getElementById('editMode').classList.add('hidden');
+            viewMode.classList.remove('hidden');
+            editMode.classList.add('hidden');
         }
     }
 
     function showForm(type) {
         if (type === 'add') {
             currentBook = null;
-            switchMode('edit');
-            document.getElementById('bookModal').style.display = 'flex';
         }
-            if (type === 'edit') {
-        document.getElementById('fTitle').value = currentBook.title;
-        document.getElementById('fAuthor').value = currentBook.author;
-        document.getElementById('fDate').value = currentBook.Datum || "";
-        switchMode('edit');
-    }
 
+        switchMode('edit');
+        document.getElementById('bookModal').style.display = 'flex';
     }
 
     async function saveData() {
         const data = {
             action: currentBook ? 'update' : 'add',
             id: document.getElementById('editId').value,
-            title: document.getElementById('fTitle').value,
-            author: document.getElementById('fAuthor').value,
+            title: document.getElementById('fTitle').value.trim(),
+            author: document.getElementById('fAuthor').value.trim(),
             status: document.getElementById('fStatus').value,
             rating: document.getElementById('fRating').value,
             Datum: document.getElementById('fDate').value,
-            cover: document.getElementById('fCover').value,
-            notes: document.getElementById('fNotes').value
+            cover: document.getElementById('fCover').value.trim() || 'img/default.jpg',
+            notes: document.getElementById('fNotes').value.trim()
         };
-        await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(data) });
-        alert("Gespeichert!");
-        location.reload(); 
+
+        if (!data.title) {
+            alert('Bitte einen Titel eingeben.');
+            return;
+        }
+
+        try {
+            await fetch(SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                body: JSON.stringify(data)
+            });
+
+            alert('Gespeichert! Bitte die Seite bei Bedarf neu laden, falls die Änderungen nicht sofort sichtbar sind.');
+            closeModal();
+            loadBooks();
+
+        } catch (error) {
+            console.error(error);
+            alert('Fehler beim Speichern.');
+        }
     }
 
     async function deleteBook() {
-        if (confirm("Dieses Buch wirklich löschen?")) {
-            const data = { action: 'delete', id: document.getElementById('editId').value };
-            await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(data) });
-            location.reload();
+        if (!currentBook) return;
+
+        if (confirm('Dieses Buch wirklich löschen?')) {
+            try {
+                const data = {
+                    action: 'delete',
+                    id: document.getElementById('editId').value
+                };
+
+                await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    body: JSON.stringify(data)
+                });
+
+                alert('Gelöscht! Bitte die Seite bei Bedarf neu laden, falls die Änderungen nicht sofort sichtbar sind.');
+                closeModal();
+                loadBooks();
+
+            } catch (error) {
+                console.error(error);
+                alert('Fehler beim Löschen.');
+            }
         }
     }
 
-    function closeModal() { document.getElementById('bookModal').style.display = 'none'; }
-    loadBooks();
-function exportData() {
-    // Отримуємо дані. Переконайтеся, що ключ 'libraryBooks' збігається з тим, що у вашому коді
-    const data = localStorage.getItem('libraryBooks'); 
-    if (!data || data === "[]") return alert("Немає даних для експорту.");
-    
-    const blob = new Blob([data], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'mein_lesetagebuch.json';
-    a.click();
-}
+    function closeModal() {
+        document.getElementById('bookModal').style.display = 'none';
+    }
 
-function importData(event) {
-    const file = event.target.files[0];
-    if (!file) return;
-    
-    const reader = new FileReader();
-    reader.onload = function(e) {
-        try {
-            const content = e.target.result;
-            JSON.parse(content); // перевірка, чи файл не битий
-            localStorage.setItem('libraryBooks', content); 
-            alert("Дані успішно імпортовано! Сторінка оновиться.");
-            location.reload();
-        } catch (err) {
-            alert("Помилка: Неправильний формат файлу.");
+    window.onclick = function(event) {
+        const modal = document.getElementById('bookModal');
+        if (event.target === modal) {
+            closeModal();
         }
     };
-    reader.readAsText(file);
-}
 
+    loadBooks();
 </script>
+
 </body>
 </html>
