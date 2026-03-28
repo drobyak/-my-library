@@ -36,6 +36,11 @@
 
 <div class="container">
     <h1>Mein Lesetagebuch</h1>
+    <div style="text-align: center; margin-bottom: 20px;">
+    <button onclick="exportData()" style="background-color: #4a7c59; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; margin: 5px;">📥 Daten exportieren</button>
+    <button onclick="document.getElementById('importFile').click()" style="background-color: #8d5b4c; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; margin: 5px;">📤 Daten importieren</button>
+    <input type="file" id="importFile" style="display:none" onchange="importData(event)">
+</div>
     <button class="btn btn-add" onclick="showForm('add')">+ Neues Buch hinzufügen</button>
     <div class="book-grid" id="grid"></div>
 </div>
@@ -176,6 +181,38 @@
 
     function closeModal() { document.getElementById('bookModal').style.display = 'none'; }
     loadBooks();
+function exportData() {
+    // Отримуємо дані. Переконайтеся, що ключ 'libraryBooks' збігається з тим, що у вашому коді
+    const data = localStorage.getItem('libraryBooks'); 
+    if (!data || data === "[]") return alert("Немає даних для експорту.");
+    
+    const blob = new Blob([data], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'mein_lesetagebuch.json';
+    a.click();
+}
+
+function importData(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        try {
+            const content = e.target.result;
+            JSON.parse(content); // перевірка, чи файл не битий
+            localStorage.setItem('libraryBooks', content); 
+            alert("Дані успішно імпортовано! Сторінка оновиться.");
+            location.reload();
+        } catch (err) {
+            alert("Помилка: Неправильний формат файлу.");
+        }
+    };
+    reader.readAsText(file);
+}
+
 </script>
 </body>
 </html>
