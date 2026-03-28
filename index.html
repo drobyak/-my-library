@@ -24,7 +24,7 @@
 
         .container {
             width: 95%;
-            max-width: 1000px;
+            max-width: 1100px;
             margin: 0 auto;
             text-align: center;
         }
@@ -37,45 +37,16 @@
             font-weight: normal;
         }
 
+        h2 {
+            color: #5d4037;
+            margin-top: 40px;
+            margin-bottom: 15px;
+            text-align: left;
+            font-size: 24px;
+        }
+
         .top-actions {
             margin-bottom: 20px;
-        }
-
-        .book-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-            gap: 15px;
-            padding: 10px 0;
-        }
-
-        .book-card {
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-            overflow: hidden;
-            cursor: pointer;
-            transition: 0.3s;
-            text-align: left;
-        }
-
-        .book-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-        }
-
-        .book-card img {
-            width: 100%;
-            height: 240px;
-            object-fit: cover;
-            display: block;
-            background: #f3ece7;
-        }
-
-        .book-title-label {
-            padding: 12px;
-            font-size: 14px;
-            font-weight: 700;
-            line-height: 1.3;
         }
 
         .btn {
@@ -107,6 +78,102 @@
             background: #c62828;
             margin-top: 20px;
             width: 100%;
+        }
+
+        .controls {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 12px;
+            margin: 20px 0 25px;
+            text-align: left;
+        }
+
+        .controls input,
+        .controls select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #d7ccc8;
+            border-radius: 4px;
+            font-family: 'Merriweather', serif;
+            box-sizing: border-box;
+            background: white;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+            margin: 20px 0 10px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 10px;
+            padding: 18px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            text-align: left;
+        }
+
+        .stat-label {
+            color: #6d4c41;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-size: 28px;
+            color: #3e2723;
+            font-weight: 700;
+        }
+
+        .book-grid,
+        .month-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 15px;
+            padding: 10px 0;
+        }
+
+        .book-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            overflow: hidden;
+            cursor: pointer;
+            transition: 0.3s;
+            text-align: left;
+        }
+
+        .book-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        .book-card img {
+            width: 100%;
+            height: 240px;
+            object-fit: cover;
+            display: block;
+            background: #f3ece7;
+        }
+
+        .book-title-label {
+            padding: 12px 12px 6px;
+            font-size: 14px;
+            font-weight: 700;
+            line-height: 1.3;
+        }
+
+        .book-meta {
+            padding: 0 12px 12px;
+            font-size: 12px;
+            color: #6d4c41;
+            line-height: 1.4;
+        }
+
+        .section-box {
+            margin-top: 35px;
+            text-align: left;
         }
 
         .modal {
@@ -196,6 +263,7 @@
         .empty-box {
             color: #6d4c41;
             margin-top: 20px;
+            text-align: left;
         }
 
         .view-cover {
@@ -207,12 +275,17 @@
             background: #f3ece7;
         }
 
-        @media (max-width: 600px) {
+        @media (max-width: 760px) {
             h1 {
                 font-size: 48px;
             }
 
-            .book-grid {
+            .controls {
+                grid-template-columns: 1fr;
+            }
+
+            .book-grid,
+            .month-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
 
@@ -235,8 +308,48 @@
     <div id="errorBox" class="error-box"></div>
     <div id="successBox" class="success-box"></div>
 
-    <div class="book-grid" id="grid"></div>
-    <div id="emptyBox" class="empty-box hidden">Noch keine Bücher vorhanden.</div>
+    <div class="controls">
+        <input type="text" id="searchInput" placeholder="Suche nach Titel oder Autor..." oninput="applyFiltersAndRender()">
+
+        <select id="statusFilter" onchange="applyFiltersAndRender()">
+            <option value="Alle">Alle Status</option>
+            <option value="Gelesen">Gelesen</option>
+            <option value="In Arbeit">In Arbeit</option>
+            <option value="Geplant">Geplant</option>
+        </select>
+
+        <select id="sortSelect" onchange="applyFiltersAndRender()">
+            <option value="date_desc">Datum: neu → alt</option>
+            <option value="date_asc">Datum: alt → neu</option>
+            <option value="rating_desc">Bewertung: hoch → niedrig</option>
+            <option value="rating_asc">Bewertung: niedrig → hoch</option>
+            <option value="title_asc">Titel: A → Z</option>
+        </select>
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-label">Gelesene Bücher diesen Monat</div>
+            <div class="stat-value" id="monthCount">0</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-label">Durchschnittliche Bewertung diesen Monat</div>
+            <div class="stat-value" id="monthAverage">—</div>
+        </div>
+    </div>
+
+    <div class="section-box">
+        <h2>Alle Bücher</h2>
+        <div class="book-grid" id="grid"></div>
+        <div id="emptyBox" class="empty-box hidden">Keine Bücher gefunden.</div>
+    </div>
+
+    <div class="section-box">
+        <h2>Meine Bücher dieses Monats</h2>
+        <div class="month-grid" id="monthGrid"></div>
+        <div id="monthEmptyBox" class="empty-box hidden">Diesen Monat gibt es noch keine gelesenen Bücher.</div>
+    </div>
 </div>
 
 <div id="bookModal" class="modal">
@@ -271,7 +384,7 @@
             <input type="text" id="fAuthor">
 
             <label class="info-label" for="fStatus">Status:</label>
-            <select id="fStatus">
+            <select id="fStatus" onchange="handleStatusChange()">
                 <option value="Gelesen">Gelesen</option>
                 <option value="In Arbeit">In Arbeit</option>
                 <option value="Geplant">Geplant</option>
@@ -297,13 +410,11 @@
 
 <script>
     const SHEET_ID = '1w6agK2BLHEWltHMhySFTPToh4ERV448Z7JdqSXBC_Ts';
-
-    /* СЮДИ ВСТАВИШ НОВИЙ URL З APPS SCRIPT ПІСЛЯ DEPLOY */
     const SCRIPT_URL = 'PASTE_YOUR_WEB_APP_URL_HERE';
-
     const SHEET_JSON_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
 
     let currentBook = null;
+    let allBooks = [];
 
     function showError(message) {
         const box = document.getElementById('errorBox');
@@ -362,6 +473,29 @@
             .replace(/'/g, '&#039;');
     }
 
+    function parseDateSafe(value) {
+        if (!value) return null;
+        const parsed = new Date(value);
+        return isNaN(parsed) ? null : parsed;
+    }
+
+    function getTodayDateString() {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
+
+    function handleStatusChange() {
+        const status = document.getElementById('fStatus').value;
+        const dateInput = document.getElementById('fDate');
+
+        if (status === 'Gelesen' && !dateInput.value) {
+            dateInput.value = getTodayDateString();
+        }
+    }
+
     async function loadBooks() {
         hideError();
 
@@ -374,15 +508,11 @@
             const text = await res.text();
             const json = JSON.parse(text.substring(47).slice(0, -2));
 
-            const grid = document.getElementById('grid');
-            const emptyBox = document.getElementById('emptyBox');
-            grid.innerHTML = '';
-
-            let hasBooks = false;
+            allBooks = [];
 
             json.table.rows.forEach(row => {
                 if (row.c && row.c[1] && row.c[1].v !== 'Titel') {
-                    const book = {
+                    allBooks.push({
                         id: row.c[0] ? row.c[0].v : '',
                         title: row.c[1] ? row.c[1].v : '',
                         author: row.c[2] ? row.c[2].v : '',
@@ -391,26 +521,148 @@
                         date: row.c[5] ? row.c[5].v : '',
                         cover: row.c[6] ? row.c[6].v : 'img/default.jpg',
                         notes: row.c[7] ? row.c[7].v : ''
-                    };
-
-                    const card = document.createElement('div');
-                    card.className = 'book-card';
-                    card.innerHTML = `
-                        <img src="${escapeHtml(book.cover || 'img/default.jpg')}" alt="${escapeHtml(book.title)}" onerror="this.src='img/default.jpg'">
-                        <div class="book-title-label">${escapeHtml(book.title)}</div>
-                    `;
-                    card.onclick = () => showDetails(book);
-
-                    grid.appendChild(card);
-                    hasBooks = true;
+                    });
                 }
             });
 
-            emptyBox.classList.toggle('hidden', hasBooks);
+            applyFiltersAndRender();
+            renderMonthlySection();
 
         } catch (error) {
             console.error(error);
             showError('Fehler beim Laden der Bücher. Bitte prüfe die Tabelle, die Freigabe und die Internetverbindung.');
+        }
+    }
+
+    function applyFiltersAndRender() {
+        const searchValue = document.getElementById('searchInput').value.trim().toLowerCase();
+        const statusValue = document.getElementById('statusFilter').value;
+        const sortValue = document.getElementById('sortSelect').value;
+
+        let filtered = [...allBooks];
+
+        if (searchValue) {
+            filtered = filtered.filter(book =>
+                String(book.title).toLowerCase().includes(searchValue) ||
+                String(book.author).toLowerCase().includes(searchValue)
+            );
+        }
+
+        if (statusValue !== 'Alle') {
+            filtered = filtered.filter(book => book.status === statusValue);
+        }
+
+        filtered.sort((a, b) => {
+            if (sortValue === 'title_asc') {
+                return String(a.title).localeCompare(String(b.title), 'de');
+            }
+
+            if (sortValue === 'rating_desc') {
+                return Number(b.rating || 0) - Number(a.rating || 0);
+            }
+
+            if (sortValue === 'rating_asc') {
+                return Number(a.rating || 0) - Number(b.rating || 0);
+            }
+
+            if (sortValue === 'date_asc') {
+                const dateA = parseDateSafe(a.date);
+                const dateB = parseDateSafe(b.date);
+
+                if (!dateA && !dateB) return 0;
+                if (!dateA) return 1;
+                if (!dateB) return -1;
+
+                return dateA - dateB;
+            }
+
+            const dateA = parseDateSafe(a.date);
+            const dateB = parseDateSafe(b.date);
+
+            if (!dateA && !dateB) return 0;
+            if (!dateA) return 1;
+            if (!dateB) return -1;
+
+            return dateB - dateA;
+        });
+
+        renderBookGrid(filtered);
+    }
+
+    function renderBookGrid(books) {
+        const grid = document.getElementById('grid');
+        const emptyBox = document.getElementById('emptyBox');
+
+        grid.innerHTML = '';
+
+        books.forEach(book => {
+            const card = createBookCard(book);
+            grid.appendChild(card);
+        });
+
+        emptyBox.classList.toggle('hidden', books.length > 0);
+    }
+
+    function createBookCard(book) {
+        const card = document.createElement('div');
+        card.className = 'book-card';
+        card.innerHTML = `
+            <img src="${escapeHtml(book.cover || 'img/default.jpg')}" alt="${escapeHtml(book.title)}" onerror="this.src='img/default.jpg'">
+            <div class="book-title-label">${escapeHtml(book.title)}</div>
+            <div class="book-meta">
+                ${escapeHtml(book.author || '—')}<br>
+                ${escapeHtml(book.status || '—')}
+            </div>
+        `;
+        card.onclick = () => showDetails(book);
+        return card;
+    }
+
+    function getCurrentMonthBooks() {
+        const now = new Date();
+        const currentMonth = now.getMonth();
+        const currentYear = now.getFullYear();
+
+        return allBooks.filter(book => {
+            if (book.status !== 'Gelesen' || !book.date) return false;
+
+            const parsed = parseDateSafe(book.date);
+            if (!parsed) return false;
+
+            return parsed.getMonth() === currentMonth && parsed.getFullYear() === currentYear;
+        });
+    }
+
+    function renderMonthlySection() {
+        const monthBooks = getCurrentMonthBooks().sort((a, b) => {
+            const dateA = parseDateSafe(a.date);
+            const dateB = parseDateSafe(b.date);
+            if (!dateA && !dateB) return 0;
+            if (!dateA) return 1;
+            if (!dateB) return -1;
+            return dateB - dateA;
+        });
+
+        const monthGrid = document.getElementById('monthGrid');
+        const monthEmptyBox = document.getElementById('monthEmptyBox');
+
+        monthGrid.innerHTML = '';
+
+        monthBooks.forEach(book => {
+            monthGrid.appendChild(createBookCard(book));
+        });
+
+        monthEmptyBox.classList.toggle('hidden', monthBooks.length > 0);
+
+        document.getElementById('monthCount').innerText = monthBooks.length;
+
+        const ratedBooks = monthBooks.filter(book => Number(book.rating) > 0);
+        if (ratedBooks.length === 0) {
+            document.getElementById('monthAverage').innerText = '—';
+        } else {
+            const sum = ratedBooks.reduce((acc, book) => acc + Number(book.rating || 0), 0);
+            const avg = sum / ratedBooks.length;
+            document.getElementById('monthAverage').innerText = avg.toFixed(1);
         }
     }
 
@@ -484,6 +736,11 @@
             return;
         }
 
+        if (data.status === 'Gelesen' && !data.Datum) {
+            data.Datum = getTodayDateString();
+            document.getElementById('fDate').value = data.Datum;
+        }
+
         try {
             const response = await fetch(SCRIPT_URL, {
                 method: 'POST',
@@ -512,7 +769,7 @@
     async function deleteBook() {
         if (!currentBook) return;
 
-        if (SCRIPT_URL === 'https://script.google.com/macros/s/AKfycbwXtyPeB26GoZfuU77jbdXUr7mG1XjTfM0mq6IA-SuEbOeKM55xIaDUVbvjda4DJMpVlg/exec') {
+        if (SCRIPT_URL === 'PASTE_YOUR_WEB_APP_URL_HERE') {
             alert('Bitte zuerst die Web-App-URL in SCRIPT_URL einfügen.');
             return;
         }
