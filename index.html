@@ -24,7 +24,7 @@
 
         .container {
             width: 95%;
-            max-width: 1100px;
+            max-width: 1150px;
             margin: 0 auto;
             text-align: center;
         }
@@ -123,6 +123,57 @@
         .stat-value {
             font-size: 28px;
             color: #3e2723;
+            font-weight: 700;
+        }
+
+        .goal-card {
+            background: white;
+            border-radius: 10px;
+            padding: 18px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            text-align: left;
+        }
+
+        .goal-title {
+            font-size: 20px;
+            color: #4a3a2a;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .goal-meta {
+            color: #5d4037;
+            line-height: 1.7;
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+
+        .progress-wrapper {
+            width: 100%;
+            height: 14px;
+            background: #eadfd7;
+            border-radius: 999px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            border-radius: 999px;
+            transition: width 0.4s ease;
+        }
+
+        .progress-month {
+            background: #8d6e63;
+        }
+
+        .progress-year {
+            background: #6d4c41;
+        }
+
+        .progress-text {
+            font-size: 14px;
+            color: #4e342e;
             font-weight: 700;
         }
 
@@ -339,6 +390,34 @@
         </div>
     </div>
 
+    <div class="stats-grid">
+        <div class="goal-card">
+            <div class="goal-title">Monatsziel</div>
+            <div class="goal-meta">
+                Ziel: <strong id="monthlyGoalValue">4</strong><br>
+                Gelesen: <strong id="monthlyReadValue">0</strong><br>
+                Übrig: <strong id="monthlyLeftValue">4</strong>
+            </div>
+            <div class="progress-wrapper">
+                <div id="monthlyProgressBar" class="progress-bar progress-month" style="width: 0%;"></div>
+            </div>
+            <div class="progress-text" id="monthlyProgressText">0%</div>
+        </div>
+
+        <div class="goal-card">
+            <div class="goal-title">Jahresziel</div>
+            <div class="goal-meta">
+                Ziel: <strong id="yearlyGoalValue">50</strong><br>
+                Gelesen: <strong id="yearlyReadValue">0</strong><br>
+                Übrig: <strong id="yearlyLeftValue">50</strong>
+            </div>
+            <div class="progress-wrapper">
+                <div id="yearlyProgressBar" class="progress-bar progress-year" style="width: 0%;"></div>
+            </div>
+            <div class="progress-text" id="yearlyProgressText">0%</div>
+        </div>
+    </div>
+
     <div class="section-box">
         <h2>Alle Bücher</h2>
         <div class="book-grid" id="grid"></div>
@@ -412,6 +491,9 @@
     const SHEET_ID = '1w6agK2BLHEWltHMhySFTPToh4ERV448Z7JdqSXBC_Ts';
     const SCRIPT_URL = 'PASTE_YOUR_WEB_APP_URL_HERE';
     const SHEET_JSON_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
+
+    const MONTHLY_GOAL = 4;
+    const YEARLY_GOAL = 50;
 
     let currentBook = null;
     let allBooks = [];
@@ -527,6 +609,7 @@
 
             applyFiltersAndRender();
             renderMonthlySection();
+            renderGoalTrackers();
 
         } catch (error) {
             console.error(error);
@@ -633,6 +716,20 @@
         });
     }
 
+    function getCurrentYearBooks() {
+        const now = new Date();
+        const currentYear = now.getFullYear();
+
+        return allBooks.filter(book => {
+            if (book.status !== 'Gelesen' || !book.date) return false;
+
+            const parsed = parseDateSafe(book.date);
+            if (!parsed) return false;
+
+            return parsed.getFullYear() === currentYear;
+        });
+    }
+
     function renderMonthlySection() {
         const monthBooks = getCurrentMonthBooks().sort((a, b) => {
             const dateA = parseDateSafe(a.date);
@@ -664,6 +761,32 @@
             const avg = sum / ratedBooks.length;
             document.getElementById('monthAverage').innerText = avg.toFixed(1);
         }
+    }
+
+    function renderGoalTrackers() {
+        const monthBooks = getCurrentMonthBooks();
+        const yearBooks = getCurrentYearBooks();
+
+        const monthlyRead = monthBooks.length;
+        const yearlyRead = yearBooks.length;
+
+        const monthlyLeft = Math.max(MONTHLY_GOAL - monthlyRead, 0);
+        const yearlyLeft = Math.max(YEARLY_GOAL - yearlyRead, 0);
+
+        const monthlyPercent = MONTHLY_GOAL > 0 ? Math.min((monthlyRead / MONTHLY_GOAL) * 100, 100) : 0;
+        const yearlyPercent = YEARLY_GOAL > 0 ? Math.min((yearlyRead / YEARLY_GOAL) * 100, 100) : 0;
+
+        document.getElementById('monthlyGoalValue').innerText = MONTHLY_GOAL;
+        document.getElementById('monthlyReadValue').innerText = monthlyRead;
+        document.getElementById('monthlyLeftValue').innerText = monthlyLeft;
+        document.getElementById('monthlyProgressBar').style.width = `${monthlyPercent}%`;
+        document.getElementById('monthlyProgressText').innerText = `${Math.round(monthlyPercent)}%`;
+
+        document.getElementById('yearlyGoalValue').innerText = YEARLY_GOAL;
+        document.getElementById('yearlyReadValue').innerText = yearlyRead;
+        document.getElementById('yearlyLeftValue').innerText = yearlyLeft;
+        document.getElementById('yearlyProgressBar').style.width = `${yearlyPercent}%`;
+        document.getElementById('yearlyProgressText').innerText = `${Math.round(yearlyPercent)}%`;
     }
 
     function showDetails(book) {
